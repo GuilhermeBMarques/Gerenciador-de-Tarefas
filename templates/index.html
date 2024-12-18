@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="shortcut icon"
+      href="https://static.vecteezy.com/system/resources/thumbnails/022/661/134/small_2x/notebook-business-icon-png.png"
+      type="image/x-icon"
+    />
+    <body>
+    <title>Lista de Tarefas</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/style.css') }}"
+    />
+  </head>
+  <body>
+    <header class="addTarefa">
+      <div class="flutuante">
+        <h1>Adicionar Tarefa</h1>
+        <form method="POST" action="/addTarefas">
+          <div class="dados">
+            <input
+              type="text"
+              name="titulo"
+              placeholder="Digite seu titulo..."
+            />
+          </div>
+          <div class="dados">
+            <input
+              type="text"
+              name="descricao"
+              placeholder="Digite sua descrição..."
+            />
+          </div>
+          <button type="submit" class="btn-add">Enviar</button>
+        </form>
+        <br>
+        <br>
+        <br>
+    </div>
+    <div class="alert">
+      {% for message in get_flashed_messages() %}
+        {% if message %}
+          <h4>{{ message }}</h4>
+        {% endif %}
+      {% endfor %}
+    </div>
+    
+    
+    </header>
+
+    <header class="modelTarefas">
+      <div class="fazerTarefas">
+        <h3>Tarefas a Fazer</h3>
+        <ul>
+          {% for tarefa in tarefas %} {% if tarefa['estado'] == "A Fazer" %}
+          <li>
+            <strong> ID:</strong> {{ tarefa['id']}} <br />
+            <strong>Tarefa:</strong> {{ tarefa['titulo']}} <br />
+            <strong>Descrição:</strong> {{ tarefa['descricao']}} <br />
+            <strong
+              >Estado:
+              <span style="color: #81c7e3">{{ tarefa['estado'] }}</span></strong
+            >
+            <br />
+            <form action="/{{ tarefa['id'] }}" method="POST">
+              <button
+                type="submit"
+                name="botao"
+                value="andamento"
+                class="btn-andamento"
+              >
+                Marcar como Andamento
+              </button>
+              <button
+                type="submit"
+                name="botao"
+                value="concluida"
+                class="btn-andamento"
+              >
+                Marcar como Concluída
+              </button>
+            </form>
+            <br />
+            <form method="POST" action="/deletTarefas/{{ tarefa['id'] }}">
+              <button type="submit" class="btn-delet">Deletar</button>
+            </form>
+          </li>
+          <br />
+          {% endif %} {% endfor %}
+        </ul>
+      </div>
+
+      <div class="andamentoTarefas">
+        <h3>Tarefas em andamento</h3>
+        <ul>
+          {% for tarefa in tarefas %} {% if tarefa['estado'] == "Em andamento"
+          %}
+          <li>
+            <strong> ID:</strong> {{ tarefa['id']}} <br />
+            <strong>Tarefa:</strong> {{ tarefa['titulo']}} <br />
+            <strong>Descrição:</strong> {{ tarefa['descricao']}} <br />
+            <strong
+              >Estado:
+              <span style="color: #f7d14c">{{ tarefa['estado'] }}</span></strong
+            >
+            <br />
+            <form action="/{{ tarefa['id'] }}" method="POST">
+              <button
+                type="submit"
+                name="botao"
+                value="concluida"
+                class="btn-andamento"
+              >
+                Marcar como Concluída
+              </button>
+            </form>
+            <br />
+            <form method="POST" action="/deletTarefas/{{ tarefa['id'] }}">
+              <button type="submit" class="btn-delet">Deletar</button>
+            </form>
+          </li>
+          <br />
+          {% endif %} {% endfor %}
+        </ul>
+      </div>
+
+      <div class="concluidoTarefas">
+        <h3>Tarefas Concluida</h3>
+        <ul>
+          {% for tarefa in tarefas %} {% if tarefa['estado'] == "Concluido" %}
+          <li>
+            <strong> ID:</strong> {{ tarefa['id']}} <br />
+            <strong>Tarefa:</strong> {{ tarefa['titulo']}} <br />
+            <strong>Descrição:</strong> {{ tarefa['descricao']}} <br />
+            <strong
+              >Estado:
+              <span style="color: #62b382">{{ tarefa['estado'] }}</span></strong
+            >
+            <br />
+            <br />
+            <form method="POST" action="/deletTarefas/{{ tarefa['id'] }}">
+              <button type="submit" class="btn-delet">Deletar</button>
+            </form>
+          </li>
+          <br />
+          {% endif %} {% endfor %}
+        </ul>
+      </div>
+    </header>
+  </body>
+
+
+</html>
